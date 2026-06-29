@@ -11,6 +11,7 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS products (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     sku TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
     price REAL DEFAULT 0,
     quantity INTEGER DEFAULT 0
   )

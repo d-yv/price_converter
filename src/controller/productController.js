@@ -25,16 +25,18 @@ export const importXlsx = (req, res) => {
     const productsToSave = rawData
       .map((row) => ({
         sku: String(row['Код'] || row['sku'] || '').trim(),
+        name: String(row['Номенклатура'] || row['name'] || '').trim(),
         price: Number(row['Медтехніка _ ОПТ'] || row['price']) || 0,
-        quantity: Number(row['Наша цена+30%'] || row['quantity']) || 0,
+        quantity: Number(row['Наличие'] || row['quantity']) || 0,
       }))
       .filter((item) => item.sku);
 
     // Запись в SQLite через Upsert и Транзакцию
     const insertOrUpdate = db.prepare(`
-      INSERT INTO products (sku, price, quantity) 
-      VALUES (@sku, @price, @quantity)
+      INSERT INTO products (sku, name, price, quantity) 
+      VALUES (@sku, @name, @price, @quantity)
       ON CONFLICT(sku) DO UPDATE SET
+        name = excluded.name,
         price = excluded.price,
         quantity = excluded.quantity
     `);
