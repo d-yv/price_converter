@@ -26,7 +26,7 @@ export const importXlsx = (req, res) => {
       .map((row) => ({
         sku: String(row['Код'] || row['sku'] || '').trim(),
         name: String(row['Номенклатура'] || row['name'] || '').trim(),
-        price: Number(row['Медтехніка _ ОПТ'] || row['price']) || 0,
+        price: Number(row['Цена'] || row['price']) || 0,
         quantity: Number(row['Наличие'] || row['quantity']) || 0,
       }))
       .filter((item) => item.sku);

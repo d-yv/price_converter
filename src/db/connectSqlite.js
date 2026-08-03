@@ -7,15 +7,20 @@ const __dirname = path.dirname(__filename);
 
 const db = new Database(path.resolve(__dirname, 'products.db'));
 
-db.exec(`
-  CREATE TABLE IF NOT EXISTS products (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    sku TEXT UNIQUE NOT NULL,
-    name TEXT NOT NULL,
-    price REAL DEFAULT 0,
-    quantity INTEGER DEFAULT 0
-  )
-`);
-db.exec(`CREATE INDEX IF NOT EXISTS idx_products_sku ON products (sku)`);
+try {
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS products (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      sku TEXT UNIQUE NOT NULL,
+      name TEXT NOT NULL,
+      price REAL DEFAULT 0,
+      quantity INTEGER DEFAULT 0
+    )
+  `);
+  db.exec(`CREATE INDEX IF NOT EXISTS idx_products_sku ON products (sku)`);
+  console.log('Таблица products успешно создана или уже существует.');
+} catch (error) {
+  console.error('Ошибка при создании таблицы products:', error);
+}
 
 export default db;
